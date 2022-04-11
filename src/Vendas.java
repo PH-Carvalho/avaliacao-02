@@ -7,8 +7,10 @@ public class Vendas {
     private Produto produtoVendido;
     private int quantidadeVendida;
     private float valorTotalVenda;
-    private double valorTotal;
+    private float valorTodasVendas;
+
     
+
 
     public DateTimeFormatter getDtf() {
         return dtf;
@@ -16,13 +18,15 @@ public class Vendas {
     public void setDtf(DateTimeFormatter dtf) {
         this.dtf = dtf;
     }
-    public double getValorTotal() {
-        return valorTotal;
-    }
-    public void setValorTotal(double valorTotal) {
-        this.valorTotal = valorTotal;
-    }
+
     DateTimeFormatter dtf = DateTimeFormatter.ofPattern("dd/MM/yyyy"); 
+    
+    public float getValorTodasVendas() {
+        return valorTodasVendas;
+    }
+    public void setValorTodasVendas(float valorTodasVendas) {
+        this.valorTodasVendas = valorTodasVendas;
+    }
     
     public LocalDate getDataVenda() {
         return dataVenda;

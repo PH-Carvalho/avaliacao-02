@@ -118,8 +118,6 @@ public class Operacoes implements Ferramentas {
                     produtoBuscado=produtos;
 
                         
-                }else{
-                    System.out.println("Produto não encontrado.");
                 }
 
             }
@@ -149,7 +147,7 @@ public class Operacoes implements Ferramentas {
                                 venda.setProdutoVendido(produtoBuscado);
 
                                 venda.setDataVenda(data);
-                                venda.setValorTotal(venda.getValorTotal()+venda.getValorTotalVenda());
+                                venda.setValorTodasVendas(venda.getValorTodasVendas()+venda.getValorTotalVenda());
 
                                 vendasProdutos.add(venda);
                             }
@@ -157,7 +155,9 @@ public class Operacoes implements Ferramentas {
                                 System.out.println("Quntidade insuficiente no estoque.");
                             }    
                            
-                 }
+                 }else{
+                    System.out.println("Produto não encontrado.");
+                }
         }
     }catch(Exception e){
         System.out.println(e);
@@ -207,11 +207,16 @@ public class Operacoes implements Ferramentas {
 
          vendasProdutos.stream()
          .filter( p -> p.getDataVenda().compareTo(dataInicial) >= 0 && p.getDataVenda().compareTo(dataFinal) <= 0 ) 
-         .forEach( p -> System.out.printf(p.toString()));
+         .forEach( p -> System.out.println(p.toString()));
 
          vendasProdutos.stream()
          .filter( p -> p.getDataVenda().compareTo(dataInicial) >= 0 && p.getDataVenda().compareTo(dataFinal) <= 0 ) 
-         .forEach(p->p.getValorTotal());
+         .forEach( p -> System.out.println("Vendas total "+p.toString()));
+
+
+         
+
+  
         }catch(Exception e ){
 
             System.out.println(e);
