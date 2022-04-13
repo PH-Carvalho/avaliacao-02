@@ -2,8 +2,10 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.DoubleSummaryStatistics;
 import java.util.List;
 import java.util.Scanner;
+import java.util.stream.Collectors;
 
 
 public class Operacoes implements Ferramentas {
@@ -33,6 +35,13 @@ public class Operacoes implements Ferramentas {
     public void listarProdutos() {
         listaProdutos.stream()
         .forEach(p-> System.out.println(p.toString()));
+
+        DoubleSummaryStatistics resumo = listaProdutos.stream()
+        .collect(Collectors.summarizingDouble(Produto::getValorProduto));
+
+        System.out.println("-------------------------------------------------------------------------------------------------------");
+        System.out.printf("Maior valor.: %.2f  Menor valor %.2f  Media dos valores %.2f ",resumo.getMax(),resumo.getMin(),resumo.getAverage());
+        
         
     }
 
@@ -111,7 +120,7 @@ public class Operacoes implements Ferramentas {
         
             for (Produto produtos : listaProdutos) {
 
-                if(produtos.getNomeProduto().equals(nomeProdutoBusca)  ){
+                if(produtos.getNomeProduto().equalsIgnoreCase(nomeProdutoBusca)  ){
 
                     encontrado=true;   
                     
@@ -147,7 +156,6 @@ public class Operacoes implements Ferramentas {
                                 venda.setProdutoVendido(produtoBuscado);
 
                                 venda.setDataVenda(data);
-                                venda.setValorTodasVendas(venda.getValorTodasVendas()+venda.getValorTotalVenda());
 
                                 vendasProdutos.add(venda);
                             }
@@ -182,55 +190,59 @@ public class Operacoes implements Ferramentas {
          System.out.println("Data de emisão do relatorio de vendas.:  "+dtf.format(LocalDateTime.now()));
 
          
-        try{
-         System.out.println("Qual é a data inicial de sua pesquisa?");
+         try{
 
-         System.out.print("Dia.:");
-         String diaInicial=teclado.next();
-         System.out.print("Mês.:");
-         String mesInicial= teclado.next();
-         System.out.print("Ano.:");
-         String anoIncial= teclado.next();
-
-         LocalDate dataInicial = LocalDate.parse(anoIncial+"-"+mesInicial+"-"+diaInicial);
-
-         System.out.println("Qual é a data  Final de sua pesquisa?");
-
-         System.out.print("Dia.:");
-         String diaFinal=teclado.next();
-         System.out.print("Mês.:");
-         String mesFinal= teclado.next();
-         System.out.print("Ano.:");
-         String anoFinal= teclado.next();
-
-         LocalDate dataFinal = LocalDate.parse(anoFinal+"-"+mesFinal+"-"+diaFinal);
-
-         vendasProdutos.stream()
-         .filter( p -> p.getDataVenda().compareTo(dataInicial) >= 0 && p.getDataVenda().compareTo(dataFinal) <= 0 ) 
-         .forEach( p -> System.out.println(p.toString()));
-
-         vendasProdutos.stream()
-         .filter( p -> p.getDataVenda().compareTo(dataInicial) >= 0 && p.getDataVenda().compareTo(dataFinal) <= 0 ) 
-         .forEach( p -> System.out.println("Vendas total "+p.toString()));
-
-
-         
-
-  
-        }catch(Exception e ){
-
-            System.out.println(e);
-
-        }
-
-
+                System.out.println("Qual é a data da venda?");
+               
+             System.out.print("Dia.:");
+             String diaInicial=teclado.next();
+             System.out.print("Mês.:");
+             String mesInicial= teclado.next();
+             System.out.print("Ano.:");
+             String anoIncial= teclado.next();
+               
+             LocalDate dataInicial = LocalDate.parse(anoIncial+"-"+mesInicial+"-"+diaInicial);
+               
+             System.out.println("Qual é a data  Final de sua pesquisa?");
+               
+             System.out.print("Dia.:");
+             String diaFinal=teclado.next();
+             System.out.print("Mês.:");
+             String mesFinal= teclado.next();
+             System.out.print("Ano.:");
+             String anoFinal= teclado.next();
+               
+             LocalDate dataFinal = LocalDate.parse(anoFinal+"-"+mesFinal+"-"+diaFinal);
+             vendasProdutos.stream()
+             .filter(v -> v.getDataVenda().compareTo(dataInicial) >= 0 && v.getDataVenda().compareTo(dataFinal) <= 0)
+             .forEach(v->v.toString());
+               
+             System.out.println("-----------------------------------------------------");
+               
+             DoubleSummaryStatistics mediaPorPeriodo =vendasProdutos.stream()
+             .filter( v -> v.getDataVenda().compareTo(dataInicial) >= 0 && v.getDataVenda().compareTo(dataFinal) <= 0 ) 
+             .collect(Collectors.summarizingDouble(Vendas::getValorTotalVenda));
+               
+             System.out.printf("A media de vendas do periodo %s até %s é de %.2fR$",dataInicial,dataFinal,mediaPorPeriodo.getAverage());
+               
+               
+               
+               
+            }catch(Exception e ){
             
-
-
-         
+                System.out.println(e.getMessage());
+            }
+    
         }
 
 
+    }
+
+    @Override
+    public void pularLinha() {
+      
+        System.out.println("\033[H\033[2J");
+        System.out.flush();
     }
     
 }

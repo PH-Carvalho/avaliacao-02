@@ -3,6 +3,7 @@
 public interface Ferramentas {
 
     public void menu();
+    public void pularLinha();
     public void cadastroProdutos(Produto produto);
     public void listarProdutos();
     public void buscaCodigoProduto(int numeroCodigoProduto);
