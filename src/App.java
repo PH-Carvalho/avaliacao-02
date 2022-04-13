@@ -1,6 +1,5 @@
 
 import java.util.List;
-import java.util.Scanner;
 
 
 public class App  {
@@ -10,22 +9,23 @@ public class App  {
        
         Operacoes operacoes = new Operacoes();
 
-        Scanner teclado = new Scanner(System.in);
-
         int opcao=0;
 
         do{
-        try{
-            operacoes.menu();
 
-            opcao=teclado.nextInt();
+           
+        try{
+            operacoes.pularLinha();
+            operacoes.menu();
+            opcao=operacoes.teclado.nextInt();
+            operacoes.pularLinha();
         }catch(Exception e){
             System.out.println(e);
             
             
             System.out.println("Tente novamente");
             System.out.println();
-            teclado.next();
+            operacoes.teclado.next();
         }
 
             switch(opcao){    
@@ -33,41 +33,54 @@ public class App  {
              case 1: 
 
                     Produto produto = new Produto();
-                    boolean CodigoExistente  =false;
+                    boolean codigoExistente  =false;
+                    boolean nomeExistente = false;
                      try{
+                         System.out.println("*-----------Cadastro-----------*");
                           System.out.print("Qual é o nome do Produto.: ");
-                          produto.setNomeProduto(teclado.next());
+                          String nomeProduto= operacoes.teclado.next();
+                          produto.setNomeProduto(nomeProduto);
+
+                          for (Produto item : operacoes.listaProdutos) {
+
+                            if(item.getNomeProduto().equals(nomeProduto)){
+                                System.out.println("Esse Nome já está sendo usado. ");
+                                nomeExistente = true;
+                            }
+                        }
+                        if(nomeExistente==false){
                     
                           System.out.print("Qual é o código numérico do Produto.: ");
-                          int codigoProduto =teclado.nextInt();
+                          int codigoProduto =operacoes.teclado.nextInt();
 
                             for (Produto item : operacoes.listaProdutos) {
 
                                 if(item.getCodigoProduto()==codigoProduto){
                                     System.out.println("Esse codigo já pertence ao produto "+item.getNomeProduto());
-                                    CodigoExistente=true;
+                                    codigoExistente=true;
                                 }
                             }
                         
-                            if(CodigoExistente==false){
+                            if(codigoExistente==false){
 
                             produto.setCodigoProduto(codigoProduto);
                              System.out.print("Qual o valor do produto.: ");
-                             produto.setValorProduto(teclado.nextFloat());
+                             produto.setValorProduto(operacoes.teclado.nextFloat());
                             
                              System.out.print("Quantidade do produto.: ");
-                             produto.setQuantidadeProduto(teclado.nextInt());
+                             produto.setQuantidadeProduto(operacoes.teclado.nextInt());
                             
                              operacoes.cadastroProdutos(produto);
-                             System.out.println(produto.getNomeProduto() + " Produto Adiconado com sucesso! ");
+                             System.out.println("\n"+produto.getNomeProduto() + " Produto Adiconado com sucesso! ");
                             }
-                          
+                        } 
                          }catch(Exception InputMismatchException){
                     
                             System.out.println("Digito invalido!");
                         }
- 
-                 
+                        operacoes.teclado.nextLine();  
+                        System.out.println("Pressione ENTER para continuar!");
+                        operacoes.teclado.nextLine();            
                      
              break;
 
@@ -78,14 +91,14 @@ public class App  {
                         System.out.println("1==> Nome do Produto \n2==>Código do Produto ");
                         System.out.println("Opção.: ");
 
-                        opcao=teclado.nextInt();
+                        opcao=operacoes.teclado.nextInt();
 
                            if(opcao==1){
 
                               String nomeProdutoBusca;
 
                               System.out.print("Digite o nome do Produto que você deseja pesquisar.: ");
-                              nomeProdutoBusca=teclado.next();
+                              nomeProdutoBusca=operacoes.teclado.next();
 
                               operacoes.buscaNomeProduto(nomeProdutoBusca);
 
@@ -94,7 +107,7 @@ public class App  {
                                int codigoProdutoBusca;
 
                               System.out.print("Digite o codigo do Produto que você deseja pesquisar.: ");
-                              codigoProdutoBusca=teclado.nextInt();
+                              codigoProdutoBusca=operacoes.teclado.nextInt();
 
                               operacoes.buscaCodigoProduto(codigoProdutoBusca);
 
@@ -102,6 +115,10 @@ public class App  {
                     } catch(Exception e ){
                          System.out.println(e);
                     }
+
+                    operacoes.teclado.nextLine();  
+                    System.out.println("\nPressione ENTER para continuar!");
+                    operacoes.teclado.nextLine();            
                     
                 break;
                 
@@ -109,10 +126,15 @@ public class App  {
 
              case 3: 
                         operacoes.listarProdutos();
+                        operacoes.teclado.nextLine();  
+                        System.out.println("\nPressione ENTER para continuar!");
+                        operacoes.teclado.nextLine();           
+                  
 
              break;
 
              case 4:  
+                    System.out.println("*-----------VENDA-----------*");
                  if (operacoes.listaProdutos.isEmpty()) {
                              
                              System.out.println("Não há produtos na loja");
@@ -122,10 +144,18 @@ public class App  {
                     operacoes.venderProduto();
 
                 }
+
+                operacoes.teclado.nextLine();  
+                System.out.println("\nPressione ENTER para continuar!");
+                operacoes.teclado.nextLine();           
                 break;
 
                 case 5:
                 operacoes.relatorioDeVendas();
+
+                operacoes.teclado.nextLine();  
+                System.out.println("\nPressione ENTER para continuar!");
+                operacoes.teclado.nextLine();           
                 break;
 
             }
@@ -136,7 +166,7 @@ public class App  {
         System.out.println(":):):):)-----Muito obrigado por utilizar nosso sistema volte sempre-----(:(:(:(:");
 
 
-        teclado.close();
+        operacoes.teclado.close();
     }
 
     public static void cadastroProdutos(List<Produto>listaProdutos){
